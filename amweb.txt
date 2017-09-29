@@ -1,0 +1,26 @@
+10 DEFINT a-z:CLS:MODE 1:INK 0,26:INK 1,0:BORDER 26:INK 2,6:INK 3,19
+20 st=2:id=st:pg=0:mxpage=32:DIM map$(32,32):url$="www.radicadesign.com/":file$="web.csv"
+25 amweb$="AMWEB 0.6b - 2017 RetroAcademy"
+30 WINDOW 1,32,1,2:PEN 10:PRINT amweb$ :PRINT
+60 WINDOW #2,34,45,3,42:PRINT #2,"LINKS";CHR$(10)
+110 WINDOW 1,32,5,42
+150 curl$=url$+file$
+180 LOCATE #1,1,2:PEN 2:INPUT #1,"URL: ",u$
+200 |HTTPGET,curl$
+220 OPENIN file$ 'Cache file
+250 FOR y=1 TO 9:FOR x=1 TO 9:INPUT #9,map$(y,x):NEXT:NEXT
+400 CLOSEIN
+410 LOCATE #1,1,3:PRINT #1,map$(1,1):PRINT 'Title 
+420 IF id+pg>VAL(map$(1,5)) THEN id=st
+500 FOR y=id TO id+pg
+510 em=VAL(map$(y,5))
+550 PEN 2:PRINT CHR$(em)+" - ";:PRINT map$(y,2)+" ";:PEN 1
+649 ' *** TEMPLATE *****
+650 PRINT map$(y,1);CHR$(10);map$(y,4);CHR$(10);:PEN 1:PRINT #2,map$(y,1);char$(10);map$(y,7);CHR$(10):PEN 1
+700 PRINT "--------------------------------":PRINT
+900 NEXT
+1000 k$=INKEY$
+1100 IF k$="3" THEN id=(id+pg)+1: GOTO 420
+1150 IF k$="6" THEN id=st : CLS: GOTO 420
+1160 IF k$="0" THEN id=st : CLS : GOTO 180
+1200 GOTO 1000
